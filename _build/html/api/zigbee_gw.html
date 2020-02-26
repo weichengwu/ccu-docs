@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>ZigBee 网关 &#8212; 控客智能家居 0.1 文档</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="ZigBee 设备通用" href="zigbee.html" />
+    <link rel="prev" title="操作主机" href="ccu.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="zigbee">
+<h1>ZigBee 网关<a class="headerlink" href="#zigbee" title="永久链接至标题">¶</a></h1>
+<div class="section" id="id1">
+<h2>打开组网通道<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<!-- tabs:start --><div class="section" id="id2">
+<h3>** 请求 **<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;reqId&quot;</span><span class="p">:</span> <span class="s2">&quot;xxx&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;OPEN_NET_CHANNEL&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;requester&quot;</span><span class="p">:</span> <span class="s2">&quot;HJ_Server&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>** 响应 **<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;reqId&quot;</span><span class="p">:</span> <span class="s2">&quot;xxx&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;OPEN_NET_CHANNEL&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<!-- tabs:end --><blockquote>
+<div><p>[!TIP]
+网关列表通过 <code class="docutils literal notranslate"><span class="pre">GET_CCU_INFO</span></code> 获得。</p>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">控客智能家居</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption"><span class="caption-text">关于:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/README.html">控客智能家居</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/CHANGELOG.html">更新日志</a></li>
+</ul>
+<p class="caption"><span class="caption-text">快速开始:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/architecture.html">系统架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/concepts.html">名词解释</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/network.html">网络链路</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/api-format.html">报文格式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">交互协议:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ccu.html">操作主机</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ZigBee 网关</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zigbee.html">ZigBee 设备通用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="light.html">灯光类设备</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scene.html">情景模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group-control.html">多控</a></li>
+</ul>
+<p class="caption"><span class="caption-text">客户端开发指导:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-start.html">启动流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-db.html">数据库设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-callback.html">回调处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-state.html">主机状态</a></li>
+</ul>
+<p class="caption"><span class="caption-text">中控业务:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../business/zigbee-dev-join.html">ZigBee 设备入网流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/ccu-datas.html">主机数据处理流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/control-dev.html">控制设备流程</a></li>
+</ul>
+<p class="caption"><span class="caption-text">附录:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/operate-type.html">设备类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/ccu-data.html">同步和新设备数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/device-status.html">设备状态信息</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/error-code.html">错误码</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/scene-type.html">情景模式类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/actions.html">支持的动作</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="ccu.html" title="上一章">操作主机</a></li>
+      <li>Next: <a href="zigbee.html" title="下一章">ZigBee 设备通用</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="转向" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Wayne.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/zigbee_gw.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

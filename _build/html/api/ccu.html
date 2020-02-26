@@ -1,0 +1,483 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>操作主机 &#8212; 控客智能家居 0.1 文档</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="ZigBee 网关" href="zigbee_gw.html" />
+    <link rel="prev" title="报文格式" href="../quick-start/api-format.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>操作主机<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<div class="section" id="id2">
+<h2>发现主机<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>用于客户端发现所在局域网内已联网的中控主机，获取中控主机的基本信息。</p>
+<p>客户端采用中控发现链路发送发现报文。</p>
+<!-- tabs:start --><div class="section" id="id3">
+<h3>** 请求 **<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;FIND_CCU&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;requester&quot;</span><span class="p">:</span> <span class="s2">&quot;HJ_CCU&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>** 响应 **<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;FIND_CCU&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;zkid&quot;</span><span class="p">:</span> <span class="s2">&quot;00162&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;zk&quot;</span><span class="p">:</span> <span class="s2">&quot;162主机&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;ip&quot;</span><span class="p">:</span> <span class="s2">&quot;192.168.0.5&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;ssl&quot;</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>arg 内参数说明：</p>
+<ul class="simple">
+<li><p>zkid：主机 ID</p></li>
+<li><p>zk：主机名称</p></li>
+<li><p>ip：主机在局域网内的 IP 地址</p></li>
+<li><p>ssl：是否支持 SSL 连接</p></li>
+</ul>
+<!-- tabs:end --></div>
+</div>
+<div class="section" id="id5">
+<h2>登录主机<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
+<p>客户端和中控主机建立 TCP 连接后发送登录报文。</p>
+<blockquote>
+<div><p>[!DANGER]
+登录主机涉及到安全性问题，不宜放在公网，请单独向负责对接的同事索要。</p>
+</div></blockquote>
+</div>
+<div class="section" id="id6">
+<h2>同步数据<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+<p>客户端通过认证后，需主机进行同步数据。</p>
+<p>同步信息包含，设备信息，区域信息，情景模式信息，规则信息，主机基本信息，状态信息等所有相关信息。</p>
+<!-- tabs:start --><div class="section" id="id7">
+<h3>** 请求 **<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;SYNC_INFO&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;requester&quot;</span><span class="p">:</span> <span class="s2">&quot;HJ_Config&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h3>** 响应 **<a class="headerlink" href="#id8" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;guard&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;arming_status&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;guard_sensors&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;sensor_type&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;scenes&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;离家&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;time&quot;</span><span class="p">:</span> <span class="s2">&quot;19:00:00&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;timer_enable&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;week&quot;</span><span class="p">:</span> <span class="s2">&quot;1,2,3&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;客厅灯&quot;</span><span class="p">,</span>
+                        <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="nt">&quot;operate_type&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="nt">&quot;delay&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="nt">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;开&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&quot;group&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="nt">&quot;nodes&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">3</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;SYNC_INFO&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot; success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>guard：主机安防信息</p>
+<ul>
+<li><p>arming_status：安防状态 (1)离家布防 (2)撤防 (3)在家布防</p></li>
+<li><p>guard_sensors：安防类传感器列表，数组类型</p>
+<ul>
+<li><p>nodeid：传感器的设备 id</p></li>
+<li><p>sensor_type：传感器类型，(1)在家安防传感器 (2)室外安防传感器 (3)24小时安防传感器 (4)24小时不告警传感器</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>scenes：情景模式列表</p>
+<ul>
+<li><p>time：定时执行时间，格式 <code class="docutils literal notranslate"><span class="pre">HH:mm:ss</span></code></p></li>
+<li><p>timer_enable：定时器开关</p></li>
+<li><p>week：重复周期，使用半角逗号分割，<code class="docutils literal notranslate"><span class="pre">1</span></code> 代表星期一，以此类推</p></li>
+<li><p>actions：动作列表</p>
+<ul>
+<li><p>name：关联设备的名称</p></li>
+<li><p>nodeid：关联设备的 id</p></li>
+<li><p>operate_type：关联设备的类型</p></li>
+<li><p>delay：延时执行，相对于情景模式开始执行，单位：秒</p></li>
+<li><p>operation：动作，全部设备支持的动作见附录</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>group：多控列表</p>
+<ul>
+<li><p>nodes：多控关联动作列表</p>
+<ul>
+<li><p>nodeid：关联设备的 id</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!-- tabs:end --></div>
+</div>
+<div class="section" id="id9">
+<h2>主机心跳<a class="headerlink" href="#id9" title="永久链接至标题">¶</a></h2>
+<p>客户端定期发送心跳请求报文到中控，识别维护 TCP 链路状态。</p>
+<!-- tabs:start --><div class="section" id="id10">
+<h3>** 请求 **<a class="headerlink" href="#id10" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;CCU_HB&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;requester&quot;</span><span class="p">:</span> <span class="s2">&quot;HJ_Server&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id11">
+<h3>** 响应 **<a class="headerlink" href="#id11" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;CCU_HB&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<!-- tabs:end --></div>
+</div>
+<div class="section" id="zigbee">
+<h2>查询主机内 ZigBee 设备的硬件信息<a class="headerlink" href="#zigbee" title="永久链接至标题">¶</a></h2>
+<!-- tabs:start --><div class="section" id="id12">
+<h3>** 请求 **<a class="headerlink" href="#id12" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;GET_ZIGBEE_DEVS_HW_INFO&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;conditions&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;condition_type&quot;</span><span class="p">:</span> <span class="s2">&quot;dev_list&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;condition_arg&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;00:12:4B:00:04:3F:AD:91&quot;</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;requester&quot;</span><span class="p">:</span> <span class="s2">&quot;HJ_Config&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>arg 内字段说明：</p>
+<ul class="simple">
+<li><p>conditions：查询过滤条件，如果为 <code class="docutils literal notranslate"><span class="pre">[]</span></code>，则表示查询主机内所有 ZigBee 设备的硬件信息。</p></li>
+</ul>
+<p>conditions 内字段说明：</p>
+<ul class="simple">
+<li><p>当 <code class="docutils literal notranslate"><span class="pre">condition_type</span></code> == <code class="docutils literal notranslate"><span class="pre">dev_list</span></code> 时，<code class="docutils literal notranslate"><span class="pre">condition_arg</span></code> 表示要查询的所有 ZigBee 设备的 Mac 地址</p></li>
+<li><p>目前 <code class="docutils literal notranslate"><span class="pre">condition_type</span></code> 仅支持 <code class="docutils literal notranslate"><span class="pre">dev_list</span></code> 一种情况</p></li>
+<li><p>注意 <code class="docutils literal notranslate"><span class="pre">conditions</span></code> 是一个数组</p></li>
+</ul>
+</div>
+<div class="section" id="id13">
+<h3>** 响应 **<a class="headerlink" href="#id13" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;GET_ZIGBEE_DEVS_HW_INFO&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;mac&quot;</span><span class="p">:</span> <span class="s2">&quot;00:12:4B:00:04:3F:AD:91&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;product_id&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
+            <span class="nt">&quot;online_status&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>arg 内字段说明（arg 为数组）：</p>
+<ul class="simple">
+<li><p>mac：设备 Mac 地址</p></li>
+<li><p>version：设备版本信息，空表示未获取到</p></li>
+<li><p>product_id：设备产品 ID</p></li>
+<li><p>online_status：设备在线状态。0：未知，1：在线，2：离线</p></li>
+</ul>
+<!-- tabs:end --></div>
+</div>
+<div class="section" id="id14">
+<h2>新设备数据<a class="headerlink" href="#id14" title="永久链接至标题">¶</a></h2>
+<!-- tabs:start --><div class="section" id="id15">
+<h3>** 推送 **<a class="headerlink" href="#id15" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;new_device_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_devices&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_hue_lights_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_hue_lights&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_ipc_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_ipcs&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_konke_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_konke_sockets&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_konke_lights_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_konke_lights&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_cnwise_music_controllers_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_cnwise_music_controllers&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_modbus_devs_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_modbus_devs&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_modbus_daikin_indoorunits_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_modbus_daikin_indoorunits&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_konke_humidifiers_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_konke_humidifiers&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_konke_aircleaners_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_konke_aircleaners&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_central_ac_gws_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_central_ac_gws&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_central_ac_indoorunits_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_central_ac_indoorunits&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="nt">&quot;new_youzhuan_music_controllers_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nt">&quot;new_youzhuan_music_controllers&quot;</span><span class="p">:</span> <span class="p">[]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;NEW_DEVICES&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>字段详细说明请参考附录：同步和新设备数据说明</p>
+<!-- tabs:end --></div>
+</div>
+<div class="section" id="id16">
+<h2>获取中控主机基本信息<a class="headerlink" href="#id16" title="永久链接至标题">¶</a></h2>
+<!-- tabs:start --><div class="section" id="id17">
+<h3>** 请求 **<a class="headerlink" href="#id17" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;GET_CCU_INFO&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;requester&quot;</span><span class="p">:</span> <span class="s2">&quot;HJ_Server&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id18">
+<h3>** 响应 **<a class="headerlink" href="#id18" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;local_ip&quot;</span><span class="p">:</span> <span class="s2">&quot;192.168.0.5&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;wan_status&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="nt">&quot;cloud_status&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="nt">&quot;gw_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="nt">&quot;gw_nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;gw_name&quot;</span><span class="p">:</span> <span class="s2">&quot;内置网关&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;gw_mac&quot;</span><span class="p">:</span> <span class="s2">&quot;00:FF&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;gw_ip&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;gw_link&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="nt">&quot;gw_type&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;run_version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.1.2&quot;</span><span class="p">,</span>
+                <span class="nt">&quot;download_version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.1.3&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;GET_CCU_INFO&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>local_ip：主机 ip</p></li>
+<li><p>wan_status：(0)不能访问外网 (1)能访问外网</p></li>
+<li><p>cloud_status：(0)与云平台断开连接 (1)与云平台连接正常</p></li>
+<li><p>gw_list：网关列表</p>
+<ul>
+<li><p>gw_nodeid：网关 id</p></li>
+<li><p>gw_name：网关名称</p></li>
+<li><p>gw_mac：网关 mac</p></li>
+<li><p>gw_ip：网关 ip</p></li>
+<li><p>gw_link：(0)网关离线 (1)网关在线</p></li>
+<li><p>gw_type：网关类型，(0)udp 网关 (1)tcp 网关 (2)串口一体化网关 (3)POE 网关 (4)9531 网关</p></li>
+<li><p>run_version：当前运行的版本</p></li>
+<li><p>download_version：已下载到本地的版本</p></li>
+</ul>
+</li>
+</ul>
+<!-- tabs:end --></div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">控客智能家居</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption"><span class="caption-text">关于:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/README.html">控客智能家居</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/CHANGELOG.html">更新日志</a></li>
+</ul>
+<p class="caption"><span class="caption-text">快速开始:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/architecture.html">系统架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/concepts.html">名词解释</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/network.html">网络链路</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/api-format.html">报文格式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">交互协议:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">操作主机</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zigbee_gw.html">ZigBee 网关</a></li>
+<li class="toctree-l1"><a class="reference internal" href="zigbee.html">ZigBee 设备通用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="light.html">灯光类设备</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scene.html">情景模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="group-control.html">多控</a></li>
+</ul>
+<p class="caption"><span class="caption-text">客户端开发指导:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-start.html">启动流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-db.html">数据库设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-callback.html">回调处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-state.html">主机状态</a></li>
+</ul>
+<p class="caption"><span class="caption-text">中控业务:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../business/zigbee-dev-join.html">ZigBee 设备入网流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/ccu-datas.html">主机数据处理流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/control-dev.html">控制设备流程</a></li>
+</ul>
+<p class="caption"><span class="caption-text">附录:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/operate-type.html">设备类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/ccu-data.html">同步和新设备数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/device-status.html">设备状态信息</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/error-code.html">错误码</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/scene-type.html">情景模式类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/actions.html">支持的动作</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../quick-start/api-format.html" title="上一章">报文格式</a></li>
+      <li>Next: <a href="zigbee_gw.html" title="下一章">ZigBee 网关</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="转向" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Wayne.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/ccu.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

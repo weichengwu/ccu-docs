@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>回调处理 &#8212; 控客智能家居 0.1 文档</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="主机状态" href="client-state.html" />
+    <link rel="prev" title="数据库设计" href="client-db.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>回调处理<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>回调是指客户端上层的业务逻辑，用户执行一个操作，发送请求报文之后，等待对应的响应报文到达时，上层该做什么逻辑。最好的做法是将客户端上层传递进来的回调，以某种形式缓存起来。</p>
+<p>与 HTTP 请求不同，TCP 的读写是分开在不同的方法里的。</p>
+<ul class="simple">
+<li><p>请求：TCP Socket 写数据</p></li>
+<li><p>响应：TCP Socket 读数据</p></li>
+</ul>
+<p>这里还用打开组网通道的报文举例：</p>
+<!-- tabs:start --><div class="section" id="id2">
+<h2>** 请求 **<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;reqId&quot;</span><span class="p">:</span> <span class="s2">&quot;xxx&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;OPEN_NET_CHANNEL&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;requester&quot;</span><span class="p">:</span> <span class="s2">&quot;HJ_Server&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>** 响应 **<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;reqId&quot;</span><span class="p">:</span> <span class="s2">&quot;xxx&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;OPEN_NET_CHANNEL&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<!-- tabs:end --><p>观察报文结构得知：</p>
+<ul class="simple">
+<li><p>请求和反馈的 <code class="docutils literal notranslate"><span class="pre">reqId</span></code> 为相同的，但并不是所有的协议均支持 <code class="docutils literal notranslate"><span class="pre">reqId</span></code>，所有场景覆盖不全</p></li>
+<li><p>请求和反馈的 <code class="docutils literal notranslate"><span class="pre">nodeid</span></code> 和 <code class="docutils literal notranslate"><span class="pre">opcode</span></code> 是相同的，除登录主机报文之外，其他所有的协议均是如此</p></li>
+</ul>
+<p>于是可以封装一个指纹对象，构造方法接收 <code class="docutils literal notranslate"><span class="pre">reqId</span></code>、<code class="docutils literal notranslate"><span class="pre">nodeid</span></code>、<code class="docutils literal notranslate"><span class="pre">opcode</span></code> 三个参数，再根据语言特性，重写指纹对象的相关方法，使其可以作为 Map 的键，这样即可将请求和响应对应上了。下面是伪代码：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>// 声明
+Map map; // 用于缓存回调
+Request req; // 请求，根据中控协议和对应的请求参数进行构造
+Response resp; // 响应，根据中控协议和响应报文进行构造
+Callback callback; // 回调，上层传入
+
+// 缓存
+map[req.fingerprint] = callback; // req.fingerprint 为 Request 的快捷方法，生成一个指纹对象
+
+// 提取
+Callback callback = map[resp.fingerprint];
+
+// 执行
+callback();
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">控客智能家居</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption"><span class="caption-text">关于:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/README.html">控客智能家居</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/CHANGELOG.html">更新日志</a></li>
+</ul>
+<p class="caption"><span class="caption-text">快速开始:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/architecture.html">系统架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/concepts.html">名词解释</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/network.html">网络链路</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/api-format.html">报文格式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">交互协议:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/ccu.html">操作主机</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/zigbee_gw.html">ZigBee 网关</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/zigbee.html">ZigBee 设备通用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/light.html">灯光类设备</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/scene.html">情景模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/group-control.html">多控</a></li>
+</ul>
+<p class="caption"><span class="caption-text">客户端开发指导:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="client-start.html">启动流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client-db.html">数据库设计</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">回调处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client-state.html">主机状态</a></li>
+</ul>
+<p class="caption"><span class="caption-text">中控业务:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../business/zigbee-dev-join.html">ZigBee 设备入网流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/ccu-datas.html">主机数据处理流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/control-dev.html">控制设备流程</a></li>
+</ul>
+<p class="caption"><span class="caption-text">附录:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/operate-type.html">设备类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/ccu-data.html">同步和新设备数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/device-status.html">设备状态信息</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/error-code.html">错误码</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/scene-type.html">情景模式类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/actions.html">支持的动作</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="client-db.html" title="上一章">数据库设计</a></li>
+      <li>Next: <a href="client-state.html" title="下一章">主机状态</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="转向" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Wayne.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/guide/client-callback.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

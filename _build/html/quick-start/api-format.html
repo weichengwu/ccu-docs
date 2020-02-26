@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>报文格式 &#8212; 控客智能家居 0.1 文档</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="操作主机" href="../api/ccu.html" />
+    <link rel="prev" title="网络链路" href="network.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>报文格式<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>报文统一使用 JSON 格式进行封装，在报文的头尾分别加入 <code class="docutils literal notranslate"><span class="pre">!</span></code> 和 <code class="docutils literal notranslate"><span class="pre">$</span></code> 进行区分。</p>
+<p>完整报文格式：<code class="docutils literal notranslate"><span class="pre">!{json_obj}$</span></code>。</p>
+<div class="section" id="id2">
+<h2>报文类型<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>报文又分为请求报文和响应报文，它们根据数据的流向进行区分。</p>
+<ul class="simple">
+<li><p>请求报文：客户端 -&gt; 中控</p></li>
+<li><p>响应报文：中控 -&gt; 客户端</p></li>
+<li><p>推送报文：中控 -&gt; 客户端（中控内数据发生变化时主动向客户端发送，不需要客户端发起请求）</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>报文内容<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>请求报文和响应报文的内容结构（JSON 对象的根字段）有所不同，下面是详细的字段说明：</p>
+<div class="section" id="id4">
+<h3>请求<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<p>| 参数      | 类型     | 含义           | 备注                      |
+| ——— | ——– | ————– | ————————- |
+| reqId     | string   | 唯一标识符     | 建议使用 <code class="docutils literal notranslate"><span class="pre">UUID</span></code> 随机生成  |
+| nodeId    | string   | 目标id         | 如果没有，则使用 <code class="docutils literal notranslate"><span class="pre">*</span></code> 代替 |
+| opcode    | string   | 操作码         | 表示想要执行的操作        |
+| arg       | 动态变化 | 参数           | 如果没有，则使用 <code class="docutils literal notranslate"><span class="pre">*</span></code> 代替 |
+| requester | string   | 目标服务处理器 |                           |</p>
+</div>
+<div class="section" id="id5">
+<h3>响应<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<p>| 参数      | 类型     | 含义       | 备注                  |
+| ——— | ——– | ———- | ——————— |
+| reqId     | string   | 唯一标识符 | 与请求相同或者 <code class="docutils literal notranslate"><span class="pre">null</span></code> |
+| nodeId    | string   | 目标id     | 一般与请求相同        |
+| opcode    | string   | 操作码     | 一般与请求相同        |
+| arg       | 动态变化 | 参数       | 如果没有，则返回 <code class="docutils literal notranslate"><span class="pre">*</span></code>  |
+| status    | string   | 处理结果   | <code class="docutils literal notranslate"><span class="pre">success</span> <span class="pre">/</span> <span class="pre">failed</span></code>    |
+| errorinfo | object   | 错误信息   | 只有反馈失败时才出现  |</p>
+<p><code class="docutils literal notranslate"><span class="pre">errorinfo</span></code> 的格式：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;error_code&quot;</span><span class="p">:</span> <span class="mi">10001</span><span class="p">,</span>
+    <span class="nt">&quot;error_msg&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h3>完整示例<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h3>
+<p>以下操作表示打开 id 为 1 的网关的组网通道，操作结果为成功。</p>
+<!-- tabs:start --><div class="section" id="id7">
+<h4>** 请求 **<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h4>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;reqId&quot;</span><span class="p">:</span> <span class="s2">&quot;xxx&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;OPEN_NET_CHANNEL&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;requester&quot;</span><span class="p">:</span> <span class="s2">&quot;HJ_Server&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id8">
+<h4>** 响应 **<a class="headerlink" href="#id8" title="永久链接至标题">¶</a></h4>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;reqId&quot;</span><span class="p">:</span> <span class="s2">&quot;xxx&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;OPEN_NET_CHANNEL&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<!-- tabs:end --><blockquote>
+<div><p>[!NOTE]
+关于 <code class="docutils literal notranslate"><span class="pre">reqId</span></code></p>
+<ul class="simple">
+<li><p>现所有 ZigBee 控制类均不支持 <code class="docutils literal notranslate"><span class="pre">reqId</span></code> 机制</p></li>
+<li><p>当中控反馈报文中无 <code class="docutils literal notranslate"><span class="pre">reqId</span></code> 字段，或 <code class="docutils literal notranslate"><span class="pre">reqId</span></code> 为 <code class="docutils literal notranslate"><span class="pre">null</span></code> 时，应采用原报文指纹方式来追踪请求上下文（后面会有专门的说明）。</p></li>
+</ul>
+<p>关于 <code class="docutils literal notranslate"><span class="pre">errorinfo</span></code></p>
+<ul class="simple">
+<li><p>历史版本协议（1.58 版本之前）无错误码机制，且目前并非所有交互都支持错误码机制。</p></li>
+<li><p>上层开发时需要判断是否有该字段，若无那么表明当前并不支持错误码。</p></li>
+</ul>
+<p>关于 <code class="docutils literal notranslate"><span class="pre">nodeId</span></code></p>
+<ul class="simple">
+<li><p>控制目标为节点设备时，表示节点设备的 id</p></li>
+<li><p>控制目标为 IFTTT、情景模式等虚拟设备时，表示虚拟设备的 id</p></li>
+<li><p>控制目标为网关时，表示网关的 id</p></li>
+<li><p>控制目标不是具体设备时，比如切换主机安防状态，统一使用 <code class="docutils literal notranslate"><span class="pre">*</span></code> 代替</p></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">控客智能家居</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption"><span class="caption-text">关于:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">控客智能家居</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/CHANGELOG.html">更新日志</a></li>
+</ul>
+<p class="caption"><span class="caption-text">快速开始:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">系统架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">名词解释</a></li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">网络链路</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">报文格式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">交互协议:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/ccu.html">操作主机</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/zigbee_gw.html">ZigBee 网关</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/zigbee.html">ZigBee 设备通用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/light.html">灯光类设备</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/scene.html">情景模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/group-control.html">多控</a></li>
+</ul>
+<p class="caption"><span class="caption-text">客户端开发指导:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-start.html">启动流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-db.html">数据库设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-callback.html">回调处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-state.html">主机状态</a></li>
+</ul>
+<p class="caption"><span class="caption-text">中控业务:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../business/zigbee-dev-join.html">ZigBee 设备入网流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/ccu-datas.html">主机数据处理流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/control-dev.html">控制设备流程</a></li>
+</ul>
+<p class="caption"><span class="caption-text">附录:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/operate-type.html">设备类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/ccu-data.html">同步和新设备数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/device-status.html">设备状态信息</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/error-code.html">错误码</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/scene-type.html">情景模式类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/actions.html">支持的动作</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="network.html" title="上一章">网络链路</a></li>
+      <li>Next: <a href="../api/ccu.html" title="下一章">操作主机</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="转向" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Wayne.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/quick-start/api-format.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

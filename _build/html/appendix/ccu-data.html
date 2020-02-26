@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh_CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>同步和新设备数据 &#8212; 控客智能家居 0.1 文档</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="设备状态信息" href="device-status.html" />
+    <link rel="prev" title="设备类型" href="operate-type.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>同步和新设备数据<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<p>以下所有数据都在同步报文和新设备报文两个协议中。</p>
+<div class="section" id="id2">
+<h2>设备信息<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>所处位置：</p>
+<ul class="simple">
+<li><p>同步：<code class="docutils literal notranslate"><span class="pre">devices</span></code></p></li>
+<li><p>新设备：<code class="docutils literal notranslate"><span class="pre">new_devices</span></code></p></li>
+</ul>
+<p>格式：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;device_field&quot;</span><span class="p">:</span> <span class="s2">&quot;灯光&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;device_field_index&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;device_icon&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;device_pos&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;mac&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;operate_type&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;room_id&quot;</span><span class="p">:</span> <span class="s2">&quot;-1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gw_mac&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;channel&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>device_field：设备类别。格式为字符串</p></li>
+<li><p>device_field_index：弃用，格式为字符串</p></li>
+<li><p>device_icon：设备图标，格式为字符串</p></li>
+<li><p>device_pos：弃用，格式为字符串</p></li>
+<li><p>mac：设备节点 MAC 地址，格式为字符串</p></li>
+<li><p>gw_mac：设备节点归属网关 MAC 地址，格式为字符串</p></li>
+<li><p>channel：设备通道，格式字符串</p></li>
+<li><p>name：设备名称，格式为字符串</p></li>
+<li><p>nodeid：设备 ID，格式为字符串</p></li>
+<li><p>operate_type：设备类型，格式为字符串</p></li>
+<li><p>room_id：设备归属房间，格式字符串</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">device_field</span></code> 目前支持的取值范围：</p>
+<ul class="simple">
+<li><p>灯光</p></li>
+<li><p>遥控器</p></li>
+<li><p>窗帘</p></li>
+<li><p>插座</p></li>
+<li><p>情景</p></li>
+<li><p>空调面板</p></li>
+<li><p>传感器</p></li>
+<li><p>智能门锁</p></li>
+<li><p>安防设备</p></li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>设备状态<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>所处位置：</p>
+<ul class="simple">
+<li><p>同步：<code class="docutils literal notranslate"><span class="pre">device_status</span></code></p></li>
+<li><p>新设备：无</p></li>
+</ul>
+<p>格式：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="s2">&quot;ON&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;SWITCH&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>nodeid 对应的设备的 operate_type 不同，即设备类型不同，那么对应的 arg 和 opcode 也是不同的，详细格式参考附录：设备状态信息。</p>
+</div>
+<div class="section" id="id4">
+<h2>情景模式<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>所处位置：</p>
+<ul class="simple">
+<li><p>同步：<code class="docutils literal notranslate"><span class="pre">scenes</span></code></p></li>
+<li><p>新设备：无</p></li>
+</ul>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;area&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;room_id&quot;</span><span class="p">:</span> <span class="mi">-1</span><span class="p">,</span>
+            <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nt">&quot;operate_type&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nt">&quot;delay&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nt">&quot;operation&quot;</span><span class="p">:</span> <span class="s2">&quot;开&quot;</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;离家&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;pannel_id&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;room_id&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;scene_image&quot;</span><span class="p">:</span> <span class="s2">&quot;scene_leave&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;scene_type&quot;</span><span class="p">:</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;time&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;timer_enable&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;week&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>area: 设备位置，一般用空字符串</p></li>
+<li><p>name: 设备名称</p></li>
+<li><p>room_id: 设备所在房间</p></li>
+<li><p>nodeid: 设备id</p></li>
+<li><p>operate_type: 设备类型</p></li>
+<li><p>delay: 动作延时，单位：秒</p></li>
+<li><p>operation: 动作，所有支持的动作请参考附录</p></li>
+<li><p>timer_enable：是否启用定时器。1：启用。0：禁用。</p></li>
+<li><p>time：执行时间。格式：<code class="docutils literal notranslate"><span class="pre">hh:mm:ss</span></code>。</p></li>
+<li><p>week：周重复周期。格式采用 <code class="docutils literal notranslate"><span class="pre">,</span></code> 分割。例如：<code class="docutils literal notranslate"><span class="pre">1,2,3,4</span></code>。</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">控客智能家居</a></h1>
+
+
+
+
+
+
+
+
+<h3>导航</h3>
+<p class="caption"><span class="caption-text">关于:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/README.html">控客智能家居</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about/CHANGELOG.html">更新日志</a></li>
+</ul>
+<p class="caption"><span class="caption-text">快速开始:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/architecture.html">系统架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/concepts.html">名词解释</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/network.html">网络链路</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick-start/api-format.html">报文格式</a></li>
+</ul>
+<p class="caption"><span class="caption-text">交互协议:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/ccu.html">操作主机</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/zigbee_gw.html">ZigBee 网关</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/zigbee.html">ZigBee 设备通用</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/light.html">灯光类设备</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/scene.html">情景模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/group-control.html">多控</a></li>
+</ul>
+<p class="caption"><span class="caption-text">客户端开发指导:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-start.html">启动流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-db.html">数据库设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-callback.html">回调处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/client-state.html">主机状态</a></li>
+</ul>
+<p class="caption"><span class="caption-text">中控业务:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../business/zigbee-dev-join.html">ZigBee 设备入网流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/ccu-datas.html">主机数据处理流程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../business/control-dev.html">控制设备流程</a></li>
+</ul>
+<p class="caption"><span class="caption-text">附录:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="operate-type.html">设备类型</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">同步和新设备数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="device-status.html">设备状态信息</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error-code.html">错误码</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scene-type.html">情景模式类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="actions.html">支持的动作</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="operate-type.html" title="上一章">设备类型</a></li>
+      <li>Next: <a href="device-status.html" title="下一章">设备状态信息</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">快速搜索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="转向" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Wayne.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/appendix/ccu-data.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
