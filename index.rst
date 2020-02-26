@@ -7,7 +7,7 @@
 ========================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: 关于:
 
    quick-start/README
@@ -15,7 +15,7 @@
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: 快速开始:
 
    quick-start/architecture
@@ -25,7 +25,7 @@
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: 交互协议:
 
    api/ccu
@@ -37,7 +37,7 @@
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: 客户端开发指导:
 
    guide/client-start
@@ -47,7 +47,7 @@
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: 中控业务:
 
    business/zigbee-dev-join
@@ -56,7 +56,7 @@
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: 附录:
 
    appendix/operate-type
