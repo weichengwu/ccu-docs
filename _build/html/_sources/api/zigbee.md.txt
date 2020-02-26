@@ -24,3 +24,37 @@ arg 内字段解释：
 * productId：产品 ID
 
 <!-- tabs:end -->
+
+## 删除 ZigBee 节点
+
+<!-- tabs:start -->
+
+#### ** 请求 **
+
+```json
+{
+    "arg": {
+        "mac": "00:FF"
+    },
+    "nodeid": "*",
+    "opcode": "DEL_DEVICE",
+    "requester": "HJ_Server"
+}
+```
+
+* mac: 节点的 mac 地址
+
+#### ** 响应 **
+
+```json
+{
+    "arg": {
+        "mac": "00:FF"
+    },
+    "nodeid": "*",
+    "opcode": "DEL_DEVICE",
+    "status": "success"
+}
+```
+
+<!-- tabs:end -->

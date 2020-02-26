@@ -48,8 +48,50 @@ arg 内参数说明：
 
 客户端和中控主机建立 TCP 连接后发送登录报文。
 
-> [!DANGER]
-> 登录主机涉及到安全性问题，不宜放在公网，请单独向负责对接的同事索要。
+<!-- tabs:start -->
+
+#### ** 请求 **
+
+```json
+{
+    "arg": {
+        "device": "iOS-xxxxxxx",
+        "seq": "1",
+        "zkid": "00018",
+        "version": "1.0",
+        "username": "admin",
+        "password": "admin"
+    },
+    "nodeid": "*",
+    "opcode": "LOGIN",
+    "requester": "HJ_Server"
+}
+```
+
+* device: 客户端型号
+* seq: 登录序列号，可以用随机数
+* zkid: 主机id
+* version: 客户端版本号
+* username: 固定 "admin"
+* password: 固定 "admin"
+
+#### ** 响应 **
+
+```json
+{
+    "arg": {
+        "error_code": 0,
+        "seq": "1"
+    },
+    "nodeid": "*",
+    "opcode": "LOGIN",
+    "status": "success"
+}
+```
+
+* error_code: 登录错误码，详情请见附录。
+
+<!-- tabs:end -->
 
 ## 同步数据
 

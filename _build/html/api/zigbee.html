@@ -57,6 +57,38 @@
 </ul>
 <!-- tabs:end --></div>
 </div>
+<div class="section" id="id3">
+<h2>删除 ZigBee 节点<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<!-- tabs:start --><div class="section" id="id4">
+<h3>** 请求 **<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;mac&quot;</span><span class="p">:</span> <span class="s2">&quot;00:FF&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;DEL_DEVICE&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;requester&quot;</span><span class="p">:</span> <span class="s2">&quot;HJ_Server&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>mac: 节点的 mac 地址</p></li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h3>** 响应 **<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;arg&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;mac&quot;</span><span class="p">:</span> <span class="s2">&quot;00:FF&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;nodeid&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opcode&quot;</span><span class="p">:</span> <span class="s2">&quot;DEL_DEVICE&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<!-- tabs:end --></div>
+</div>
 </div>
 
 
